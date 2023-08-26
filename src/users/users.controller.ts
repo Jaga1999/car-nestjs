@@ -24,48 +24,42 @@ export class UsersController {
     private readonly authService: AuthService,
   ) {}
 
-  @Get('/colors/:color')
-  setColor(@Param('color') color: string, @Session() session: any) {
-    session.color = color;
-  }
-
-  @Get('/colors')
-  getColor(@Session() session: any) {
-    return session.color;
-  }
-
   @Post('/signup')
-  createUser(@Body() body: CreateUserDto) {
-    return this.authService.signUp(body.email, body.password);
+  async createUser(@Body() body: CreateUserDto, @Session() session: any) {
+    const user = await this.authService.signUp(body.email, body.password);
+    session.userId = user.id;
+    return user;
   }
 
   @Post('/signin')
-  SignIn(@Body() body: CreateUserDto) {
-    return this.authService.signIn(body.email, body.password);
+  async SignIn(@Body() body: CreateUserDto, @Session() session: any) {
+    const user = await this.authService.signIn(body.email, body.password);
+    session.userId = user.id;
+    return user;
   }
 
   @Get('/:id')
-  findUser(@Param('id') id: string) {
-    return this.userService.findOne(parseInt(id));
+  async findUser(@Param('id') id: string) {
+    return await this.userService.findOne(parseInt(id));
   }
 
   @Get()
-  findByEmail(@Query('email') email: string) {
-    return this.userService.findByEmail(email);
+  async findByEmail(@Query('email') email: string) {
+    return await this.userService.findByEmail(email);
   }
 
   @Get()
-  findALL() {
-    return this.userService.findAll();
+  async findALL() {
+    return await this.userService.findAll();
   }
 
   @Patch('/:id')
-  update(@Param('id') id: string, @Body() body: UpdateUserDto) {
-    return this.userService.update(parseInt(id), body);
+  async update(@Param('id') id: string, @Body() body: UpdateUserDto) {
+    return await this.userService.update(parseInt(id), body);
   }
 
   @Delete('/:id')
-  removeUser(@Param('id') id: string) {
-    return this.userService.remove(parseInt(id));
+  async removeUser(@Param('id') id: string) {
+    return await this.userService.remove(parseInt(id));
   }
 }
