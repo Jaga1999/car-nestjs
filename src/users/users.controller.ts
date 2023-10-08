@@ -9,6 +9,7 @@ import {
   Post,
   Query,
   Session,
+  UseGuards,
 } from '@nestjs/common';
 import { CreateUserDto } from './DTO/createUser.dto';
 import { UsersService } from './users.service';
@@ -18,6 +19,7 @@ import { UserDto } from './DTO/user.dto';
 import { AuthService } from './auth.service';
 import { User } from './users.entity';
 import { CurrentUser } from './decorators/current-user.decorator';
+import { AuthGuard } from 'src/guards/auth.guard';
 
 @Controller('auth')
 @Serialize(UserDto)
@@ -47,6 +49,7 @@ export class UsersController {
   // }
 
   @Get('/whoami')
+  @UseGuards(AuthGuard)
   whoami(@CurrentUser() user: User) {
     return user;
   }
