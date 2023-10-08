@@ -55,4 +55,12 @@ describe('AuthService', () => {
       service.signIn('asdflkj@asdlfkj.com', 'passdflkj'),
     ).rejects.toThrow(NotFoundException);
   });
+
+  it('throws if an invalid password is provided', async () => {
+    fakeUserService.findByEmail = () =>
+      Promise.resolve({ email: 'asdf@asdf.com', password: 'laskdjf' } as User);
+    await expect(
+      service.signIn('laskdjf@alskdfj.com', 'passowrd'),
+    ).rejects.toThrow(BadRequestException);
+  });
 });
