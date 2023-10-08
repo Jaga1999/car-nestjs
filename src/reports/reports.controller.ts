@@ -14,6 +14,7 @@ import { CurrentUser } from 'src/users/decorators/current-user.decorator';
 import { Serialize } from 'src/interceptors/serialize.interceptor';
 import { ReportDto } from './DTO/report.dto';
 import { ApproveReportDto } from './DTO/approve-report.dto';
+import { AdminGuard } from 'src/guards/admin.guard';
 
 @UseGuards(AuthGuard)
 @Controller('reports')
@@ -32,6 +33,7 @@ export class ReportsController {
   }
 
   @Patch('/:id')
+  @UseGuards(AdminGuard)
   approveReport(@Param('id') id: string, @Body() body: ApproveReportDto) {
     return this.reportSerice.changeApproval(id, body.approved);
   }
