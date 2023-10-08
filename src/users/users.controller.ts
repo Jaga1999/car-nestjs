@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  NotFoundException,
   Param,
   Patch,
   Post,
@@ -36,6 +37,20 @@ export class UsersController {
     const user = await this.authService.signIn(body.email, body.password);
     session.userId = user.id;
     return user;
+  }
+
+  @Get('/whoami')
+  whoami(@Session() session: any) {
+    return this.userService.findOne(session.userId);
+  }
+
+  @Post('/signout')
+  signout(@Session() session: any) {
+    if (!session.userId) {
+      throw new NotFoundException('No User Signed In Now!!');
+    }
+    session.userId = null;
+    return 'User Signout Successfully';
   }
 
   @Get('/:id')
