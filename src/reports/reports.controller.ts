@@ -5,6 +5,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { CreateReportDto } from './DTO/create-report.dto';
@@ -15,6 +16,7 @@ import { Serialize } from 'src/interceptors/serialize.interceptor';
 import { ReportDto } from './DTO/report.dto';
 import { ApproveReportDto } from './DTO/approve-report.dto';
 import { AdminGuard } from 'src/guards/admin.guard';
+import { GetEstimateDto } from './DTO/get-estimate.dto';
 
 @UseGuards(AuthGuard)
 @Controller('reports')
@@ -28,8 +30,8 @@ export class ReportsController {
   }
 
   @Get()
-  getAll() {
-    return this.reportSerice.getAll();
+  getEstimate(@Query() query: GetEstimateDto) {
+    console.log(query);
   }
 
   @Patch('/:id')
